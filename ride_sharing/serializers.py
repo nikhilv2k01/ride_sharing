@@ -1,7 +1,5 @@
-# serializers.py
 from rest_framework import serializers
 from .models import Ride
-# from .utils import stop_ride_tracking
 
 
 class RideCreateSerializer(serializers.ModelSerializer):
@@ -49,15 +47,14 @@ class RideStatusUpdateSerializer(serializers.ModelSerializer):
             )
 
         return data
-    
-    
+
     # def update(self, instance, validated_data):
     #     instance = super().update(instance, validated_data)
-        
+
     #     # Check if the ride status is "COMPLETED" or "CANCELLED"
     #     if instance.status in ["COMPLETED", "CANCELLED"]:
     #         stop_ride_tracking(instance.id)  # Stop ride tracking
-            
+
     #     return instance
 
 

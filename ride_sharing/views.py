@@ -6,8 +6,6 @@ from .models import Ride
 from .serializers import *
 from .utils import *
 
-# Your view code remains unchanged
-
 
 class RideCreateAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -16,7 +14,8 @@ class RideCreateAPIView(APIView):
         mutable_data = request.data.copy()
 
         mutable_data["rider"] = request.user.id
-        mutable_data["current_location"] = request.data.get("pickup_location", None)
+        mutable_data["current_location"] = request.data.get(
+            "pickup_location", None)
         serializer = RideCreateSerializer(data=mutable_data)
         if serializer.is_valid():
             ride = serializer.save()
@@ -32,7 +31,8 @@ class RideCreateAPIView(APIView):
                 {"message": "Ride does not exist."}, status=status.HTTP_404_NOT_FOUND
             )
 
-        serializer = RideStatusUpdateSerializer(ride, data=request.data, partial=True)
+        serializer = RideStatusUpdateSerializer(
+            ride, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -41,6 +41,7 @@ class RideCreateAPIView(APIView):
 
 class RideDetailAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, ride_id):
         try:
             ride = Ride.objects.get(id=ride_id)
@@ -54,14 +55,16 @@ class RideDetailAPIView(APIView):
 
 class RideListAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request):
         rides = Ride.objects.filter(rider=request.user)
         serializer = RideDetailSerializer(rides, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
 
 class RideLocationAPIView(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, ride_id):
         try:
             ride = Ride.objects.get(id=ride_id)
